@@ -1,6 +1,6 @@
 {
-  "name": "with-electron-typescript",
-  "productName": "ElectronTypescriptNext",
+  "name": "relights",
+  "productName": "relights",
   "version": "1.0.0",
   "main": "main/index.js",
   "scripts": {
@@ -31,6 +31,7 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "electron-clipboard-watcher": "^1.0.1",
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
     "react": "^16.12.0",

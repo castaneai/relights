@@ -1,16 +1,26 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+
+import { IpcRenderer } from 'electron'
+import React, { useState, useEffect } from 'react'
+
+declare global {
+  interface Window {
+    ipcRenderer: IpcRenderer
+  }
+}
 
 const IndexPage = () => {
+  const [imageUrl, setImageUrl] = useState<string>('');
+  useEffect(() => {
+    console.log('use effect!')
+    window.ipcRenderer.on('image', (_, imageUrl: string) => {
+      setImageUrl(imageUrl);
+    });
+  }, [imageUrl])
   return (
-    <Layout title="Home | Next.js + TypeScript + Electron Example">
+    <div>
       <h1>Hello Next.js 👋</h1>
-      <p>
-        <Link href="/about">
-          <a>About</a>
-        </Link>
-      </p>
-    </Layout>
+      <img src={imageUrl} />
+    </div>
   )
 }
 

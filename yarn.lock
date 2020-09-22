@@ -2563,6 +2563,11 @@ electron-builder@^21.2.0:
     update-notifier "^3.0.1"
     yargs "^13.3.0"
 
+electron-clipboard-watcher@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/electron-clipboard-watcher/-/electron-clipboard-watcher-1.0.1.tgz#5fc2d8e2bbfd7341f1f2c3c5315abd3d6a6f2f56"
+  integrity sha1-X8LY4rv9c0Hx8sPFMVq9PWpvL1Y=
+
 electron-is-dev@>=0.3.0, electron-is-dev@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-1.2.0.tgz#2e5cea0a1b3ccf1c86f577cee77363ef55deb05e"
