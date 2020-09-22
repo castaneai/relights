@@ -3,10 +3,32 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, app, ipcMain, nativeImage, clipboard, Notification } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
-import { startWatchClipboard } from './clipboard'
+
+type CopyArg = {
+  dataUrl: string
+  size: { width: number, height: number }
+}
+
+ipcMain.on('copy', (_, arg: CopyArg) => {
+  console.log(`copy ipc event received to ${arg.size.width}x${arg.size.height}`);
+  const image = nativeImage.createFromDataURL(arg.dataUrl);
+
+  const beforeSize = image.getSize();
+  const resized = image.resize({ width: arg.size.width, height: arg.size.height });
+  clipboard.writeImage(resized);
+
+  const before = `${beforeSize.width}x${beforeSize.height}`
+  const after = `${resized.getSize().width}x${resized.getSize().height}`
+  const n = new Notification({
+    title: 'relights',
+    body: `resized! ${before} -> ${after}`,
+    icon: resized,
+  })
+  n.show()
+})
 
 
 const showWindow = () => {
@@ -40,11 +62,5 @@ let mainWindow: BrowserWindow | null = null;
 app.on('ready', async () => {
   await prepareNext('./renderer')
   mainWindow = showWindow();
-  startWatchClipboard(image => {
-    console.log(`resized image: ${image}`);
-    if (mainWindow !== null) {
-      mainWindow.show();
-      mainWindow.webContents.send('image', image.toDataURL());
-    }
-  });
+  console.log(mainWindow);
 })
