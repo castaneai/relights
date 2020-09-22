@@ -18,10 +18,8 @@ const ResizableImage = (props: Props) => {
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 	const [dragOrigin, setDragOrigin] = useState<Position>();
 	const [zoom, setZoom] = useState<number>(1.0);
-	console.log(props.src)
 
 	const handleMouseDown = useCallback((e: React.MouseEvent) => {
-		console.log('on mouse down');
 		setDragOrigin({ x: e.clientX, y: e.clientY })
 		setIsDragging(true);
 		e.preventDefault();
@@ -36,23 +34,23 @@ const ResizableImage = (props: Props) => {
 	}, [dragOrigin])
 
 	const handleMouseUp = useCallback(() => {
-		console.log('on mouse up')
 		setIsDragging(false);
 	}, []);
 
+	// Reset zoom when new image is pasted
+	useEffect(() => {
+		setZoom(1.0);
+	}, [props.src])
+
 	useEffect(() => {
 		if (isDragging) {
-			console.log('is dragging: true')
 			window.addEventListener('mousemove', handleMouseMove);
 			window.addEventListener('mouseup', handleMouseUp);
 		} else {
-			console.log('is dragging: false')
 			window.removeEventListener('mousemove', handleMouseMove)
 			window.removeEventListener('mouseup', handleMouseUp)
-			if (zoom != 1.0) {
-				console.log(`zoom: ${zoom}`);
-				props.onResize(computeImageSize(props, zoom))
-			}
+			console.log(`on resized (zoom: ${zoom})`);
+			if (zoom != 1.0) props.onResize(computeImageSize(props, zoom))
 		}
 	}, [isDragging]);
 
@@ -64,12 +62,13 @@ const ResizableImage = (props: Props) => {
 			height: 'auto',
 		}
 	}, [zoom]);
-	;
 	const computedSize = computeImageSize(props, zoom);
 
 	return <div style={style} onMouseDown={handleMouseDown}>
-		<div style={{ position: 'absolute', background: 'rgba(0, 0, 0, 0.6)', color: 'white', padding: '0.2em' }}>{computedSize.width}x{computedSize.height}</div>
-		<img style={{ width: '100%', height: 'auto' }} src={props.src} />
+		<div style={{ position: 'absolute', background: 'rgba(0, 0, 0, 0.6)', color: 'white', padding: '0.2em' }}>
+			{computedSize.width}x{computedSize.height} ({Math.floor(zoom * 100)}%)
+		</div>
+		<img width={computedSize.width} height={computedSize.height} src={props.src} />
 	</div>
 }
 

@@ -42,7 +42,7 @@ const IndexPage = () => {
         reader.readAsDataURL(data.files[0])
       }
     })
-  }, [image])
+  }, [])
 
   const handleResize = useCallback((size: Size) => {
     if (!image) return;
@@ -51,7 +51,6 @@ const IndexPage = () => {
 
   return (
     <div>
-      <h1>Hello Next.js 👋</h1>
       {image ?
         <ResizableImage src={image.imageUrl}
           width={image.width}

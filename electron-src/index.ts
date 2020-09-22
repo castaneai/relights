@@ -53,7 +53,6 @@ const showWindow = () => {
       slashes: true,
     })
   mainWindow.loadURL(url)
-  mainWindow.webContents.openDevTools();
   return mainWindow;
 }
 
